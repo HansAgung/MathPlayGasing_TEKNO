@@ -1,34 +1,38 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserRepository {
-  Future<void> saveUserData({
-    required String fullName,
-    required String username,
-    required String email,
-    required String password,
-    required String gender,
-    required String character,
-  }) async {
+  // Cek apakah email ada di SharedPreferences (sebagai contoh daftar email disimpan dalam list)
+  Future<bool> isEmailRegistered(String email) async {
     final prefs = await SharedPreferences.getInstance();
-    
-    await prefs.setString('fullName', fullName);
-    await prefs.setString('username', username);
-    await prefs.setString('email', email);
-    await prefs.setString('password', password);
-    await prefs.setString('gender', gender);
-    await prefs.setString('character', character);
+    final storedEmail = prefs.getString('email');
+    return storedEmail == email;
   }
 
-  // 🔹 Method untuk mendapatkan data user
-  Future<Map<String, String?>> getUserData() async {
+  // Simpan password baru untuk email tertentu
+  Future<void> saveNewPassword(String email, String newPassword) async {
     final prefs = await SharedPreferences.getInstance();
-    return {
-      'fullName': prefs.getString('fullName'),
-      'username': prefs.getString('username'),
-      'email': prefs.getString('email'),
-      'password': prefs.getString('password'),
-      'gender': prefs.getString('gender'),
-      'character': prefs.getString('character'),
-    };
+    // Simpan password dengan key unik, misal 'password_<email>'
+    await prefs.setString('password_$email', newPassword);
+  }
+
+   Future<void> savePassword(String password) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('password', password);
+  }
+
+  // Untuk demo, simpan email baru (bisa dipanggil sekali untuk test)
+  Future<void> registerEmail(String email) async {
+    final prefs = await SharedPreferences.getInstance();
+    final emails = prefs.getStringList('registered_emails') ?? [];
+    if (!emails.contains(email)) {
+      emails.add(email);
+      await prefs.setStringList('registered_emails', emails);
+    }
+  }
+
+  Future<String?> getUsername() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('username');
   }
 }
+

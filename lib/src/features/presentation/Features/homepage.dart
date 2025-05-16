@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:mathgasing_v1/src/shared/Components/buttom_navbar_custom.dart';
+import 'package:mathgasing_v1/src/features/presentation/Features/Subscribes/subscribe_page.dart';
+import 'package:mathgasing_v1/src/features/presentation/Features/main_wrapper_page.dart';
 import 'package:mathgasing_v1/src/shared/Utils/app_colors.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import '../../../core/constants/app_images.dart';
 import '../../../shared/Components/header_homepage.dart';
 import '../../../shared/Components/search_bar_custom.dart';
+import '../../../shared/Components/subcribe_status.dart';
 import '../../data/models/quest_model.dart';
 import '../../data/repository/quest_repository.dart';
-import '../../../shared/Components/quest_progress_card.dart';  // Import komponen QuestProgressCard
+import '../../../shared/Components/quest_progress_card.dart';
+import 'QuestFeature/quest_module_page.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -56,6 +59,11 @@ class _HomepageState extends State<Homepage> {
           _hasMore = false;
         }
       });
+
+      // ✅ Hitung dan cetak status quest
+      final int onProgressCount = _quests.where((q) => q.status == "onProgress").length;
+      print("Jumlah quest dengan status onProgress: $onProgressCount");
+      print("Jumlah total quest: ${_quests.length}");
     } catch (e) {
       print('❌ Error fetching quests: $e');
       setState(() => _isLoading = false);
@@ -71,15 +79,20 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
+    final List<QuestModel> _onProgressQuests = _quests.where((quest) => quest.status == "onProgress").toList();
+
+    final int totalQuest = _quests.length;
+    final int onProgressCount = _quests.where((q) => q.status == "toDo").length;
+    final double progressPercent = totalQuest > 0 ? 1 - (onProgressCount / totalQuest) : 0.0;
+    final int progressPercentInt = (progressPercent * 100).round();
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Stack(
           children: [
             Container(color: Colors.white),
 
-            // Background Pattern
             SizedBox(
               height: screenHeight / 2,
               width: double.infinity,
@@ -96,11 +109,33 @@ class _HomepageState extends State<Homepage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const HeaderHomepage(username: "Atalya Saragih"),
-                  const SizedBox(height: 20),
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      const HeaderHomepage(),
+                      const SizedBox(height: 12),
+                      Positioned(
+                        top: 15,
+                        right: -28,
+                        child: RotatedBox(
+                          quarterTurns: 1,
+                          child: SubscribeStatus(
+                            type: SubscribeType.subscribe,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => const SubscribePage()),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
 
                   // Title
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(
@@ -124,14 +159,22 @@ class _HomepageState extends State<Homepage> {
                           ),
                         ],
                       ),
-                      Text(
-                        "Lihat Semua",
-                        style: TextStyle(
-                          color: AppColors.fontDescColor,
-                          fontSize: 10,
-                          fontFamily: 'Poppins-Light',
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => MainWrapperPage(initialIndex: 2)),
+                          );
+                        },
+                        child: Text(
+                          "Lihat Semua",
+                          style: TextStyle(
+                            color: AppColors.fontDescColor,
+                            fontSize: 10,
+                            fontFamily: 'Poppins-Light',
+                          ),
                         ),
-                      ),
+                      )
                     ],
                   ),
 
@@ -157,7 +200,6 @@ class _HomepageState extends State<Homepage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // Left Text
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -184,17 +226,17 @@ class _HomepageState extends State<Homepage> {
                           ),
                         ),
 
-                        // Circular Progress
+                        // ✅ Circular Progress yang sudah dihitung
                         CircularPercentIndicator(
                           radius: 45.0,
                           lineWidth: 8.0,
-                          percent: 0.75,
+                          percent: progressPercent,
                           backgroundColor: Colors.grey.shade300,
                           progressColor: AppColors.primaryColor,
                           circularStrokeCap: CircularStrokeCap.round,
-                          center: const Text(
-                            "75%",
-                            style: TextStyle(
+                          center: Text(
+                            "$progressPercentInt%",
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                             ),
@@ -214,29 +256,45 @@ class _HomepageState extends State<Homepage> {
 
                   // Quest List
                   ListView.builder(
-                    itemCount: _quests.length + (_hasMore ? 1 : 0),
+                    itemCount: _onProgressQuests.length + (_hasMore ? 1 : 0),
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
-                      if (index >= _quests.length) {
-                        return const Center(child: Padding(
-                          padding: EdgeInsets.symmetric(vertical: 16),
-                          child: CircularProgressIndicator(),
-                        ));
+                      if (index >= _onProgressQuests.length) {
+                        return const Center(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
                       }
 
-                      final quest = _quests[index];
+                      final quest = _onProgressQuests[index];
+                      final modules = quest.moduleContent?.questModule ?? [];
 
-                      return QuestProgressCard(
-                        idQuest: quest.idQuest,
-                        titleQuest: quest.titleQuest,
-                        imageUrl: quest.imgCardQuest,
-                        progress: quest.progress, // Pastikan ini dalam range 0.0 - 1.0
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => QuestModulePage(
+                                title: quest.titleQuest,
+                                questModules: modules,
+                              ),
+                            ),
+                          );
+                        },
+                        child: QuestProgressCard(
+                          idQuest: quest.idQuest,
+                          titleQuest: quest.titleQuest,
+                          imageUrl: quest.imgCardQuest,
+                          progress: quest.progress,
+                        ),
                       );
                     },
                   ),
 
-                  const SizedBox(height: 80), // space for bottom navbar
+                  const SizedBox(height: 80),
                 ],
               ),
             ),

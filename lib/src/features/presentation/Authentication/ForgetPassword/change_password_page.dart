@@ -4,27 +4,93 @@ import 'package:mathgasing_v1/src/shared/Components/button_primary_custom.dart';
 import 'package:mathgasing_v1/src/shared/Components/custom_password_field.dart';
 import 'package:mathgasing_v1/src/shared/Components/term_checkbox.dart';
 import 'package:mathgasing_v1/src/shared/Utils/app_colors.dart';
+import '../../../data/repository/user_database_repository.dart';
 
-class ChangePasswordPage extends StatelessWidget {
+class ChangePasswordPage extends StatefulWidget {
   const ChangePasswordPage({super.key});
+
+  @override
+  State<ChangePasswordPage> createState() => _ChangePasswordPageState();
+}
+
+class _ChangePasswordPageState extends State<ChangePasswordPage> {
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+
+  final UserRepository _userRepository = UserRepository();
+
+  bool _termsChecked = false;
+  String? _passwordError;
+  String? _confirmPasswordError;
+
+  @override
+  void dispose() {
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  void _goToLoginPage() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginPage()),
+    );
+  }
+
+  void _submit() async {
+    setState(() {
+      _passwordError = null;
+      _confirmPasswordError = null;
+    });
+
+    String password = passwordController.text.trim();
+    String confirmPassword = confirmPasswordController.text.trim();
+
+    if (password.isEmpty) {
+      setState(() {
+        _passwordError = "Password tidak boleh kosong";
+      });
+      return;
+    }
+
+    if (confirmPassword.isEmpty) {
+      setState(() {
+        _confirmPasswordError = "Konfirmasi password tidak boleh kosong";
+      });
+      return;
+    }
+
+    if (password != confirmPassword) {
+      setState(() {
+        _confirmPasswordError = "Password tidak cocok";
+      });
+      return;
+    }
+
+    if (!_termsChecked) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Harap setujui syarat dan ketentuan')),
+      );
+      return;
+    }
+
+    // Simpan password baru melalui repository
+    await _userRepository.savePassword(password);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Password berhasil diubah')),
+    );
+
+    _goToLoginPage();
+  }
 
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
-    final TextEditingController passwordController = TextEditingController();
-     final TextEditingController confirmPasswordController = TextEditingController();
 
-    @override
-    void goToLoginPage() {
-      Navigator.pushReplacement(context, 
-      MaterialPageRoute(builder: (context) => const LoginPage()),
-      );
-    }
-  
     return Scaffold(
       body: Stack(
         children: [
-          // Gambar Latar Belakang
           Positioned(
             top: 0,
             left: 0,
@@ -35,14 +101,12 @@ class ChangePasswordPage extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-
-          // Container Putih untuk Form Lupa Password
           Positioned(
             bottom: 0,
             left: 0,
             right: 0,
             child: Container(
-              height: screenHeight * 0.58, // Setengah layar bawah
+              height: screenHeight * 0.58,
               padding: const EdgeInsets.all(24),
               decoration: const BoxDecoration(
                 color: Colors.white,
@@ -65,9 +129,7 @@ class ChangePasswordPage extends StatelessWidget {
                       ),
                     ),
                   ),
-
-                   const SizedBox(height: 20),
-
+                  const SizedBox(height: 20),
                   const Text(
                     "Buat Ulang Password",
                     style: TextStyle(
@@ -86,17 +148,30 @@ class ChangePasswordPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 30),
-                  CustomPasswordField(hintText: 'Masukan Password baru', controller: passwordController),
+                  CustomPasswordField(
+                    hintText: 'Masukan Password baru',
+                    controller: passwordController,
+                    
+                  ),
                   const SizedBox(height: 15),
-                  CustomPasswordField(hintText: 'Konfirmasi Password baru', controller: confirmPasswordController),
+                  CustomPasswordField(
+                    hintText: 'Konfirmasi Password baru',
+                    controller: confirmPasswordController,
+                   
+                  ),
                   const Spacer(),
                   TermsCheckbox(
                     onChanged: (isChecked) {
-                      print("Checkbox status: $isChecked");
+                      setState(() {
+                        _termsChecked = isChecked ?? false;
+                      });
                     },
                   ),
                   const SizedBox(height: 10),
-                  ButtonPrimaryCustom(text: 'Ubah Password', onPressed: goToLoginPage),
+                  ButtonPrimaryCustom(
+                    text: 'Ubah Password',
+                    onPressed: _submit,
+                  ),
                 ],
               ),
             ),

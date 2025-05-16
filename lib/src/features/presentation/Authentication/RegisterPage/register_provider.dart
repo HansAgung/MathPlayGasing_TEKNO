@@ -54,6 +54,9 @@ class RegisterProvider extends ChangeNotifier {
     await prefs.setString('email', email);
     await prefs.setString('birthDate', birthDate.toIso8601String());
     await prefs.setString('password', password);
+    await prefs.setInt('points', 100); 
+    await prefs.setInt('energy', 100); 
+    await prefs.setString('status_subscribe', 'none');
     notifyListeners();
 
     print("✅ Data pengguna berhasil disimpan:");
@@ -62,5 +65,9 @@ class RegisterProvider extends ChangeNotifier {
     print("Email: ${prefs.getString('email')}");
     print("Birth Date: ${prefs.getString('birthDate')}");
     print("Password: ${prefs.getString('password')}");
+    print("Birth Date: ${prefs.getString('birthDate')}");
+    print("Poin: ${prefs.getInt('points')}");
+    print("Energy: ${prefs.getInt('energy')}");
+    print("status_subscribe: ${prefs.getString('status_subscribe')}");
   }
 }

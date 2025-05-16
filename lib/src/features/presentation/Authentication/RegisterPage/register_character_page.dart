@@ -8,6 +8,8 @@ import 'package:mathgasing_v1/src/shared/Utils/app_colors.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../Features/main_wrapper_page.dart';
+
 class RegisterCharacterPage extends StatefulWidget {
   const RegisterCharacterPage({super.key});
 
@@ -47,10 +49,9 @@ class _RegisterCharacterPageState extends State<RegisterCharacterPage> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString("character", selectedCharacter);
 
-    Navigator.pushAndRemoveUntil(
+    Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => Homepage()),
-      (route) => false,
+      MaterialPageRoute(builder: (context) => const MainWrapperPage()),
     );
   }
 

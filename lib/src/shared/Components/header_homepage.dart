@@ -1,11 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mathgasing_v1/src/shared/Utils/app_colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constants/app_images.dart';
 
-class HeaderHomepage extends StatelessWidget {
-  final String username;
+class HeaderHomepage extends StatefulWidget {
+  const HeaderHomepage({super.key});
 
-  const HeaderHomepage({super.key, required this.username});
+  @override
+  State<HeaderHomepage> createState() => _HeaderHomepageState();
+}
+
+class _HeaderHomepageState extends State<HeaderHomepage> {
+  String username = '';
+  int points = 0;
+  int energy = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      username = prefs.getString('username') ?? 'Guest';
+      points = prefs.getInt('points') ?? 0;
+      energy = prefs.getInt('energy') ?? 0;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +52,7 @@ class HeaderHomepage extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center, // ✅ Rata tengah vertikal
+          mainAxisAlignment: MainAxisAlignment.center, // Rata tengah vertikal
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
@@ -46,9 +70,9 @@ class HeaderHomepage extends StatelessWidget {
             const SizedBox(height: 25),
             Row(
               children: [
-                _buildBlueBox("1000"),
+                _buildBlueBox(points.toString(), AppImages.POINT_ICON, "Points"),
                 const SizedBox(width: 10),
-                _buildBlueBox("1000"),
+                _buildBlueBox(energy.toString(), AppImages.ENERGY_ICON, "Energy"),
               ],
             )
           ],
@@ -57,19 +81,44 @@ class HeaderHomepage extends StatelessWidget {
     );
   }
 
-  Widget _buildBlueBox(String value) {
-    return Container(
-      width: 89,
-      height: 24,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: Colors.blue,
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: Text(
-        value,
-        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-      ),
-    );
-  }
+  Widget _buildBlueBox(String value, String iconPath, String label) {
+  return Container(
+    width: 100,  
+    height: 24,
+    padding: const EdgeInsets.symmetric(horizontal: 6),
+    decoration: BoxDecoration(
+      color: AppColors.green100,
+      borderRadius: BorderRadius.circular(6),
+    ),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Image.asset(
+          iconPath,
+          width: 16,
+          height: 16,
+        ),
+        const SizedBox(width: 6),
+        Text(
+          value,
+          style: const TextStyle(
+            color: AppColors.fontDescColor,
+            fontFamily: 'Poppins-SemiBold',
+            fontSize: 14,
+          ),
+        ),
+        const SizedBox(width: 4),
+        Text(
+          label,
+          style: const TextStyle(
+            color: AppColors.fontDescColor,
+            fontFamily: 'Poppins-Light',
+            fontSize: 10,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
 }

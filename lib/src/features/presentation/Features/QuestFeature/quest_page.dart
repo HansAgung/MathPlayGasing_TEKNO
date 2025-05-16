@@ -18,6 +18,13 @@ class _QuestPageState extends State<QuestPage> {
   List<QuestModel> questList = [];
   bool isLoading = true;
 
+  final List<double> greyscaleMatrix = [
+    0.2126, 0.7152, 0.0722, 0, 0,
+    0.2126, 0.7152, 0.0722, 0, 0,
+    0.2126, 0.7152, 0.0722, 0, 0,
+    0,      0,      0,      1, 0,
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -25,7 +32,7 @@ class _QuestPageState extends State<QuestPage> {
   }
 
   Future<void> fetchQuests() async {
-    final data = await QuestRepository().fetchQuestList(page: 1, pageSize: 10); // Sesuai repository kamu
+    final data = await QuestRepository().fetchQuestList(page: 1, pageSize: 10);
     setState(() {
       questList = data;
       isLoading = false;
@@ -34,11 +41,11 @@ class _QuestPageState extends State<QuestPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 50.0),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -68,26 +75,41 @@ class _QuestPageState extends State<QuestPage> {
                   : Column(
                       children: questList.map(
                         (quest) {
-                          final modules = quest.moduleContent?.questModule ?? []; // Safely access questModule
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => QuestModulePage(
-                                    title: quest.titleQuest,
-                                    questModules: modules, 
-                                     // Use the safely accessed modules
+                          final modules = quest.moduleContent?.questModule ?? [];
+                          final isLocked = quest.status == "toDo";
+
+                          Widget card = QuestProgressCard(
+                            idQuest: quest.idQuest,
+                            titleQuest: quest.titleQuest,
+                            imageUrl: quest.imgCardQuest,
+                            progress: quest.progress,
+                          );
+
+                          if (isLocked) {
+                            card = ColorFiltered(
+                              colorFilter: ColorFilter.matrix(greyscaleMatrix),
+                              child: card,
+                            );
+                          }
+
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 12.0),
+                            child: isLocked
+                                ? card
+                                : GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => QuestModulePage(
+                                            title: quest.titleQuest,
+                                            questModules: modules,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: card,
                                   ),
-                                ),
-                              );
-                            },
-                            child: QuestProgressCard(
-                              idQuest: quest.idQuest,
-                              titleQuest: quest.titleQuest,
-                              imageUrl: quest.imgCardQuest,
-                              progress: quest.progress,
-                            ),
                           );
                         },
                       ).toList(),
@@ -95,8 +117,8 @@ class _QuestPageState extends State<QuestPage> {
             ],
           ),
         ),
-        bottomNavigationBar: const SizedBox(),
       ),
+      bottomNavigationBar: const SizedBox(),
     );
   }
 }

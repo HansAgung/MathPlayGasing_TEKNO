@@ -1,8 +1,5 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:mathgasing_v1/src/core/helper/global.dart';
-import 'package:mathgasing_v1/src/features/data/repository/user_database_repository.dart';
 import 'package:mathgasing_v1/src/features/presentation/Authentication/RegisterPage/register_gender_page.dart';
 import 'package:mathgasing_v1/src/features/presentation/Features/main_wrapper_page.dart';
 import 'package:mathgasing_v1/src/shared/Components/alert_failed_custom.dart';
@@ -11,6 +8,7 @@ import 'package:mathgasing_v1/src/shared/Components/custom_textfield.dart';
 import 'package:mathgasing_v1/src/shared/Components/custom_password_field.dart';
 import 'package:mathgasing_v1/src/shared/Components/button_primary_custom.dart';
 import 'package:mathgasing_v1/src/features/presentation/Authentication/ForgetPassword/forget_password_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -22,7 +20,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final UserRepository _userRepository = UserRepository(); 
+
   String? _emailError;
   bool _showAlert = false;
 
@@ -57,44 +55,27 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    // Endpoint API dan parameter query
-    
-    final url = '$baseAPI/api/mock-login?email=$enteredEmail&password=$enteredPassword';
-
     try {
-      final response = await http.get(Uri.parse(url));
+      final prefs = await SharedPreferences.getInstance();
+      final storedEmail = prefs.getString('email');
+      final storedPassword = prefs.getString('password');
 
-      if (response.statusCode == 200) {
-        // Jika response berhasil, tampilkan data hasil request
-        final Map<String, dynamic> data = json.decode(response.body);
-        print('Response API: ${data.toString()}');
+      if (storedEmail == enteredEmail && storedPassword == enteredPassword) {
+        // Simpan ulang (opsional, tapi sesuai pola kamu sebelumnya)
+        await prefs.setString('email', storedEmail!);
+        await prefs.setString('fullname', prefs.getString('fullName') ?? '');
+        await prefs.setInt('points', prefs.getInt('points') ?? 100);
+        await prefs.setInt('energy', prefs.getInt('energy') ?? 100);
+        await prefs.setString('status_subscribe', prefs.getString('status_subscribe') ?? 'none');
 
-        // Cek apakah data users ditemukan
-        var users = data['users'] as List;
-        if (users.isNotEmpty) {
-          var user = users[0]; // Misalnya memilih user pertama
-          print("User ditemukan: ${user['fullname']}");
+        print("✅ Login berhasil sebagai ${prefs.getString('fullname')}");
 
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const MainWrapperPage()),
-          );
-        } else {
-          print("❌ Email atau password tidak cocok!");
-          setState(() {
-            _showAlert = true;
-          });
-
-          Future.delayed(const Duration(seconds: 3), () {
-            if (mounted) {
-              setState(() {
-                _showAlert = false;
-              });
-            }
-          });
-        }
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const MainWrapperPage()),
+        );
       } else {
-        print('❌ Error saat menghubungi server: ${response.statusCode}');
+        print("❌ Email atau password tidak cocok!");
         setState(() {
           _showAlert = true;
         });
@@ -108,8 +89,7 @@ class _LoginPageState extends State<LoginPage> {
         });
       }
     } catch (e) {
-      // Tangani error yang mungkin terjadi
-      print('❌ Terjadi error: $e');
+      print('❌ Terjadi error saat login: $e');
       setState(() {
         _showAlert = true;
       });
@@ -141,7 +121,6 @@ class _LoginPageState extends State<LoginPage> {
               fit: BoxFit.cover,
             ),
           ),
-
           Positioned(
             top: screenHeight * 0.25,
             left: 0,
@@ -171,7 +150,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 16),
-
                   const Text(
                     "Halo,",
                     style: TextStyle(
@@ -189,20 +167,17 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-
                   CustomTextField(
                     hintText: "Masukkan email",
                     controller: _emailController,
                     errorMessage: _emailError,
                   ),
                   const SizedBox(height: 16),
-
                   CustomPasswordField(
                     hintText: "Masukan Password Anda",
                     controller: _passwordController,
                   ),
                   const SizedBox(height: 10),
-
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
@@ -218,14 +193,11 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-
                   ButtonPrimaryCustom(
                     text: 'Masuk',
                     onPressed: _validateAndLogin,
                   ),
-
                   const SizedBox(height: 10),
-
                   Center(
                     child: TextButton(
                       onPressed: () {
@@ -248,7 +220,6 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
-
           if (_showAlert)
             Positioned(
               top: 60,

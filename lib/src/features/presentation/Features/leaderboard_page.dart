@@ -49,11 +49,11 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
 
             return Column(
               children: [
-                SizedBox(height: screenHeight * 0.05),
+                // SizedBox(height: screenHeight * 0.05),
                 Stack(
                   children: [ 
                     SizedBox(
-                      height: screenHeight / 3.5,
+                      height: screenHeight / 2.8,
                       width: double.infinity,
                       child: Image.asset(
                         AppImages.LEADERBOARD_IMG_1,
@@ -64,14 +64,27 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                       top: 40,
                       left: 0,
                       right: 0,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      child: Column(
                         children: [
-                          _buildUserCircle(top3.length > 1 ? top3[1] : null, 66),
-                          const SizedBox(width: 16),
-                          _buildUserCircle(top3.isNotEmpty ? top3[0] : null, 100),
-                          const SizedBox(width: 16),
-                          _buildUserCircle(top3.length > 2 ? top3[2] : null, 90),
+                          const Text(
+                            "Papan Peringkat",
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontFamily: 'Poppins-SemiBold',
+                              color: AppColors.primaryColor,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              _buildUserCircle(top3.length > 1 ? top3[1] : null, 66),
+                              const SizedBox(width: 30),
+                              _buildUserCircle(top3.isNotEmpty ? top3[0] : null, 100),
+                              const SizedBox(width: 30),
+                              _buildUserCircle(top3.length > 2 ? top3[2] : null, 90),
+                            ],
+                          ),
                         ],
                       ),
                     ),
@@ -128,6 +141,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                     },
                   ),
                 ),
+                const SizedBox(height: 100),
               ],
             );
           },

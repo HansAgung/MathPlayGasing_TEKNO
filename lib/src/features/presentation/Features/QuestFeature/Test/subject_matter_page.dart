@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mathgasing_v1/src/features/presentation/Features/QuestFeature/reward_page.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../../../../../core/constants/app_images.dart';
-import '../../../../../shared/Components/button_third_custom.dart';
+import '../../../../../shared/Components/button_secondary_custom.dart';
 import 'package:intl/intl.dart';
 import '../../../../../shared/Utils/app_colors.dart';
 import '../../../../data/models/subject_matter_model.dart';
@@ -85,7 +86,7 @@ class _SubjectMatterPageState extends State<SubjectMatterPage> {
                 ),
                 // 🔶 KONTEN DI ATAS LATAR
                 ListView.builder(
-                  padding: const EdgeInsets.only(top: 40, left: 16, right: 16),
+                  padding: const EdgeInsets.only(top: 20, left: 16, right: 16),
                   itemCount: content.length + 2,
                   itemBuilder: (context, index) {
                     final parsedDate = DateTime.parse(subject.createdAt);
@@ -97,18 +98,26 @@ class _SubjectMatterPageState extends State<SubjectMatterPage> {
                           Text(
                             subject.titleSubjectMatter,
                             style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 24,
+                              fontFamily: "Poppins-SemiBold",
                             ),
                           ),
-                          const SizedBox(height: 8),
                           Text(
                             formattedDate,
-                            style: const TextStyle(fontSize: 11),
+                            style: const TextStyle(
+                              fontSize: 11,
+                              fontFamily: "Poppins-Light",
+                              color: AppColors.fontDescColor,
+                            ),
                           ),
+                          const SizedBox(height: 25),
                           Text(
                             subject.subjectMatterDesc,
-                            style: const TextStyle(fontSize: 12),
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontFamily: "Poppins-Light",
+                              color: AppColors.fontDescColor,
+                            ),
                           ),
                           const SizedBox(height: 20),
                         ],
@@ -117,9 +126,14 @@ class _SubjectMatterPageState extends State<SubjectMatterPage> {
                     if (index == content.length + 1) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 32.0),
-                        child: ButtonThirdCustom(
+                        child: ButtonSecondaryCustom(
                           text: "Mulai Latihan",
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context, 
+                              MaterialPageRoute(builder: (context) => RewardPage()),
+                            );
+                          }
                         ),
                       );
                     }
@@ -129,7 +143,7 @@ class _SubjectMatterPageState extends State<SubjectMatterPage> {
                         YoutubePlayer.convertUrlToId(item.videoUrl ?? '');
 
                     return Padding(
-                      padding: const EdgeInsets.only(bottom: 40),
+                      padding: const EdgeInsets.only(bottom: 20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -152,7 +166,7 @@ class _SubjectMatterPageState extends State<SubjectMatterPage> {
                                 builder: (context, player) => player,
                               ),
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 50),
                           ],
                           Text(
                             item.titleMaterial,
@@ -161,13 +175,20 @@ class _SubjectMatterPageState extends State<SubjectMatterPage> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: 6),
-                          Text(item.descriptionMaterial),
+                          const SizedBox(height: 16),
                           if (item.materialImgSupport != null &&
                               item.materialImgSupport!.isNotEmpty) ...[
-                            const SizedBox(height: 12),
                             Image.network(item.materialImgSupport!),
+                            const SizedBox(height: 10),
                           ],
+                          const SizedBox(height: 16),
+                          Text(item.descriptionMaterial,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontFamily: "Poppins-Light",
+                              color: AppColors.fontDescColor
+                            ),
+                          ),
                           const SizedBox(height: 6),
                         ],
                       ),

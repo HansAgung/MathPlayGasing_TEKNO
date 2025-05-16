@@ -25,20 +25,21 @@ class _ArtefakPageState extends State<ArtefakPage> {
   }
 
   Future<void> fetchQuests() async {
-    final data = await QuestRepository().fetchQuestList(page: 1, pageSize: 10); // Sesuai repository kamu
+    final data = await QuestRepository().fetchQuestList(page: 1, pageSize: 10);
+    final filtered = data.where((e) => e.status == "onProgress").toList();
     setState(() {
-      questList = data;
+      questList = filtered;
       isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 50.0),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -68,7 +69,7 @@ class _ArtefakPageState extends State<ArtefakPage> {
                   : Column(
                       children: questList.map(
                         (quest) {
-                          final modules = quest.moduleContent?.questModule ?? []; // Safely access questModule
+                          final modules = quest.moduleContent?.questModule ?? [];
                           return GestureDetector(
                             onTap: () {
                               Navigator.push(
@@ -77,18 +78,16 @@ class _ArtefakPageState extends State<ArtefakPage> {
                                   builder: (_) => ArtefakModulePage(
                                     title: quest.titleQuest,
                                     description: quest.questDesc,
-                                    questModules: modules, 
-                                     // Use the safely accessed modules
+                                    questModules: modules,
                                   ),
                                 ),
                               );
                             },
                             child: ArtefactProgressCard(
-                              idQuest: quest.idQuest, 
-                              titleQuest: quest.titleQuest, 
-                              descQuest: quest.questDesc ?? '', 
+                              idQuest: quest.idQuest,
+                              titleQuest: quest.titleQuest,
+                              descQuest: quest.questDesc ?? '',
                             ),
-              
                           );
                         },
                       ).toList(),

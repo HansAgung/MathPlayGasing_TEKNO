@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mathgasing_v1/src/features/data/models/quest_module_model.dart';
 import '../../../../core/helper/lesson_helper.dart';
 import '../../../../shared/Components/lesson_card.dart';
+import '../../../../shared/Components/lesson_subject_card.dart';
 import '../../../../shared/Components/search_bar_custom.dart';
 import '../../../../shared/Utils/app_colors.dart';
 
@@ -220,7 +221,7 @@ class _ExpandableModuleCardState extends State<ExpandableModuleCard> {
                             const SizedBox(height: 8),
                         itemBuilder: (context, index) {
                           final lesson = filteredLessons[index];
-                          return LessonCard(
+                          return LessonSubjectCard(
                             title: lesson.titleLessonQuest,
                             description: lesson.questLessonDesc,
                           );

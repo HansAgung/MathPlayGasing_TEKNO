@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mathgasing_v1/src/features/data/repository/user_repository.dart';
+import 'package:mathgasing_v1/src/features/data/repository/user_database_repository.dart';
 import 'package:mathgasing_v1/src/features/presentation/Authentication/ForgetPassword/change_password_page.dart';
 import 'package:mathgasing_v1/src/features/presentation/Authentication/login_page.dart';
 import 'package:mathgasing_v1/src/shared/Components/button_fourth_custom.dart';
@@ -35,10 +35,9 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
     return RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$").hasMatch(email);
   }
 
-  void _validateAndSubmit() {
+  void _validateAndSubmit() async{
     String enteredEmail = _emailController.text.trim();
 
-    // Cek apakah email valid
     if (enteredEmail.isEmpty) {
       setState(() {
         _emailError = "Email tidak boleh kosong";
@@ -51,12 +50,11 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
       return;
     }
 
-    // Jika valid, reset error dan lanjut cek email di database
     setState(() {
       _emailError = null;
     });
 
-    bool emailExists = _userRepository.isEmailRegistered(enteredEmail);
+    bool emailExists = await _userRepository.isEmailRegistered(enteredEmail);
 
     if (emailExists) {
       setState(() {
@@ -92,7 +90,6 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
     return Scaffold(
       body: Stack(
         children: [
-          // Gambar Latar Belakang
           Positioned(
             top: 0,
             left: 0,
@@ -103,8 +100,6 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
               fit: BoxFit.cover,
             ),
           ),
-
-          // Alert berhasil jika email ditemukan
           if (_showSuccessAlert)
             Positioned(
               top: 50,
@@ -114,8 +109,6 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                 message: "Email kamu ditemukan",
               ),
             ),
-
-          // Alert gagal jika email tidak ditemukan
           if (_showFailedAlert)
             Positioned(
               top: 50,
@@ -125,14 +118,12 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                 message: "Email kamu tidak ditemukan",
               ),
             ),
-
-          // Container Putih untuk Form Lupa Password
           Positioned(
             bottom: 0,
             left: 0,
             right: 0,
             child: Container(
-              height: screenHeight * 0.5, // Setengah layar bawah
+              height: screenHeight * 0.5,
               padding: const EdgeInsets.all(24),
               decoration: const BoxDecoration(
                 color: Colors.white,
@@ -155,9 +146,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 20),
-
                   const Text(
                     "Lupa Password?",
                     style: TextStyle(
@@ -166,26 +155,18 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       color: AppColors.primaryColor,
                     ),
                   ),
-
                   const SizedBox(height: 10),
-
                   const InstructionBoxCustom(
                     message: 'Harap masukan alamat email anda, sebagai verifikasi diri anda',
                   ),
-
                   const SizedBox(height: 30),
-
-                  // CustomTextField dengan error message
                   CustomTextField(
                     hintText: 'Masukan Email Kamu',
                     controller: _emailController,
                     errorMessage: _emailError,
                   ),
-
                   const SizedBox(height: 20),
-
-                  const Spacer(), // Mendorong tombol ke bawah
-
+                  const Spacer(),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 5),
                     child: SizedBox(
@@ -201,13 +182,12 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                             ),
                     ),
                   ),
-
-                  //untuk "Belum punya akun"
                   Center(
                     child: TextButton(
                       onPressed: () {
-                        Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => const LoginPage()),
                         );
                       },
                       child: const Text(
@@ -215,11 +195,11 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                         style: TextStyle(
                           color: AppColors.thirdColor,
                           fontSize: 14,
-                          fontFamily: 'Poppins-Medium'),
+                          fontFamily: 'Poppins-Medium',
+                        ),
                       ),
                     ),
                   ),
-
                 ],
               ),
             ),

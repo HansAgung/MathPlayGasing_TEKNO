@@ -9,6 +9,7 @@ class QuestModel {
   final String imgCardQuest;
   final double progress; // Add this field
   final ModuleContent? moduleContent; // Add moduleContent
+  final String status;
 
   // Constructor
   QuestModel({
@@ -18,6 +19,7 @@ class QuestModel {
     required this.imgCardQuest,
     required this.progress,
     this.moduleContent, // Make moduleContent optional
+    required this.status,
   });
 
   // Factory constructor for converting JSON data to QuestModel
@@ -31,6 +33,7 @@ class QuestModel {
       moduleContent: json['module_content'] != null
           ? ModuleContent.fromJson(json['module_content'])
           : null, // Parse moduleContent if it's available
+      status: json['status'] ?? '', // Handle null values for status
     );
   }
 }
