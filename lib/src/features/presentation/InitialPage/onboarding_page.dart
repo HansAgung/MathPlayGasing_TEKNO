@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:mathgasing_v1/src/features/data/models/onboarding_model.dart';
 import 'package:mathgasing_v1/src/features/data/repository/onboarding_repository.dart';
 import 'package:mathgasing_v1/src/features/presentation/Authentication/login_page.dart';
-import 'package:mathgasing_v1/src/shared/Components/button_top_bar.dart';
-import 'package:mathgasing_v1/src/shared/Components/button_third_custom.dart';
+import 'package:mathgasing_v1/src/shared/Components/Button/button_top_bar.dart';
+import 'package:mathgasing_v1/src/shared/Components/Button/button_third_custom.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});

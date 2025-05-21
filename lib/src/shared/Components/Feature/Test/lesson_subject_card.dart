@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../core/constants/app_images.dart';
+import '../../../../core/constants/app_images.dart';
 
 class LessonSubjectCard extends StatelessWidget {
   final String title;

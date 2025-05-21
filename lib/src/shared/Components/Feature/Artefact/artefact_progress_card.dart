@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mathgasing_v1/src/features/data/models/quest_model.dart';
-import '../../core/constants/app_images.dart';
+import '../../../../core/constants/app_images.dart';
 
 class ArtefactProgressCard extends StatelessWidget {
   final int idQuest;

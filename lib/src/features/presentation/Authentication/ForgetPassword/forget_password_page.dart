@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:mathgasing_v1/src/features/data/repository/user_database_repository.dart';
 import 'package:mathgasing_v1/src/features/presentation/Authentication/ForgetPassword/change_password_page.dart';
 import 'package:mathgasing_v1/src/features/presentation/Authentication/login_page.dart';
-import 'package:mathgasing_v1/src/shared/Components/button_fourth_custom.dart';
-import 'package:mathgasing_v1/src/shared/Components/button_primary_custom.dart';
-import 'package:mathgasing_v1/src/shared/Components/custom_textfield.dart';
-import 'package:mathgasing_v1/src/shared/Components/instruction_box_custom.dart';
-import 'package:mathgasing_v1/src/shared/Components/alert_success_custom.dart';
-import 'package:mathgasing_v1/src/shared/Components/alert_failed_custom.dart';
+import 'package:mathgasing_v1/src/shared/Components/Button/button_fourth_custom.dart';
+import 'package:mathgasing_v1/src/shared/Components/Button/button_primary_custom.dart';
+import 'package:mathgasing_v1/src/shared/Components/Form/custom_textfield.dart';
+import 'package:mathgasing_v1/src/shared/Components/Form/instruction_box_custom.dart';
+import 'package:mathgasing_v1/src/shared/Components/Form/alert_success_custom.dart';
+import 'package:mathgasing_v1/src/shared/Components/Form/alert_failed_custom.dart';
 import 'package:mathgasing_v1/src/shared/Utils/app_colors.dart';
 
 class ForgetPasswordPage extends StatefulWidget {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mathgasing_v1/src/features/presentation/Features/ProfileFeature/profile_page.dart';
 import 'package:mathgasing_v1/src/features/presentation/Features/Artefact/artefak_page.dart';
 import 'package:mathgasing_v1/src/features/presentation/Features/leaderboard_page.dart';
-import 'package:mathgasing_v1/src/shared/Components/buttom_navbar_custom.dart';
+import 'package:mathgasing_v1/src/shared/Components/Button/buttom_navbar_custom.dart';
 import 'QuestFeature/quest_page.dart';
 import 'homepage.dart';
 import 'package:mathgasing_v1/src/shared/Utils/app_colors.dart';
@@ -48,45 +48,48 @@ class _MainWrapperPageState extends State<MainWrapperPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        IndexedStack(
-          index: _currentIndex,
-          children: _pages,
-        ),
+    return SafeArea(
+      child: Stack(
+        children: [
+          IndexedStack(
+            index: _currentIndex,
+            children: _pages,
+          ),
 
-        if (_currentIndex != 0)
+          if (_currentIndex != 0)
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(16),
+                  bottomRight: Radius.circular(16),
+                ),
+                // Jika kamu ingin AppBar aktif kembali, uncomment di bawah ini
+                // child: AppBar(
+                //   title: Text(
+                //     _pageTitles[_currentIndex],
+                //     style: const TextStyle(color: Colors.white),
+                //   ),
+                //   backgroundColor: AppColors.primaryColor,
+                //   iconTheme: const IconThemeData(color: Colors.white),
+                //   elevation: 0,
+                // ),
+              ),
+            ),
+
           Positioned(
-            top: 0,
+            bottom: 0,
             left: 0,
             right: 0,
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(16),
-                bottomRight: Radius.circular(16),
-              ),
-              // child: AppBar(
-              //   title: Text(
-              //     _pageTitles[_currentIndex],
-              //     style: const TextStyle(color: Colors.white),
-              //   ),
-              //   backgroundColor: AppColors.primaryColor,
-              //   iconTheme: const IconThemeData(color: Colors.white),
-              //   elevation: 0,
-              // ),
+            child: BottomNavbarCustom(
+              currentIndex: _currentIndex,
+              onTap: _onBottomNavTapped,
             ),
           ),
-
-        Positioned(
-          bottom: 0,
-          left: 0,
-          right: 0,
-          child: BottomNavbarCustom(
-            currentIndex: _currentIndex,
-            onTap: _onBottomNavTapped,
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mathgasing_v1/src/features/presentation/Features/QuestFeature/reward_page.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../../../../../core/constants/app_images.dart';
-import '../../../../../shared/Components/button_secondary_custom.dart';
+import '../../../../../shared/Components/Button/button_secondary_custom.dart';
 import 'package:intl/intl.dart';
 import '../../../../../shared/Utils/app_colors.dart';
 import '../../../../data/models/subject_matter_model.dart';

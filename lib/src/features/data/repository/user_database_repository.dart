@@ -34,5 +34,36 @@ class UserRepository {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('username');
   }
+
+  Future<bool> updatePointsEnergy(int pointsToConvert) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    int currentPoints = prefs.getInt('points') ?? 0;
+    int currentEnergy = prefs.getInt('energy') ?? 0;
+
+    if (pointsToConvert <= 0 || pointsToConvert > currentPoints) {
+      // Invalid input, gagal update
+      return false;
+    }
+
+    int energyGain = pointsToConvert ~/ 4; // 4 poin = 1 energy
+    if (energyGain == 0) {
+      // Jika poin kurang dari 4, tidak bisa konversi
+      return false;
+    }
+
+    int pointsAfter = currentPoints - (energyGain * 4);
+    int energyAfter = currentEnergy + energyGain;
+
+    await prefs.setInt('points', pointsAfter);
+    await prefs.setInt('energy', energyAfter);
+
+    print("✅ Poin berhasil dikurangi menjadi: $pointsAfter");
+    print("✅ Energy berhasil ditambah menjadi: $energyAfter");
+
+    return true;
+  }
+
 }
+
 

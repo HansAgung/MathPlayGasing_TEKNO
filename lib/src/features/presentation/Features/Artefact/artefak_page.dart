@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mathgasing_v1/src/features/presentation/Features/Artefact/artefak_module_page.dart';
-import 'package:mathgasing_v1/src/shared/Components/artefact_progress_card.dart';
+import 'package:mathgasing_v1/src/shared/Components/Feature/Artefact/artefact_progress_card.dart';
 import 'package:mathgasing_v1/src/shared/Utils/app_colors.dart';
-import '../../../../shared/Components/search_bar_custom.dart';
+import '../../../../shared/Components/Form/search_bar_custom.dart';
 import '../../../data/models/quest_model.dart';
 import '../../../data/repository/quest_repository.dart';
 

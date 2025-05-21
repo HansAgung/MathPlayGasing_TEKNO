@@ -7,6 +7,7 @@ class QuestModuleModel {
   final int moduleStatus;
   final LessonQuestModel? lessonContent;
   final List<LessonQuestModel>? lessonQuest;
+  final String status;
 
   QuestModuleModel({
     required this.idQuestModule,
@@ -15,6 +16,7 @@ class QuestModuleModel {
     required this.moduleStatus,
     this.lessonContent,
     this.lessonQuest,
+    required this.status,
   });
 
   factory QuestModuleModel.fromJson(Map<String, dynamic> json) {
@@ -34,6 +36,7 @@ class QuestModuleModel {
               .map((e) => LessonQuestModel.fromJson(e))
               .toList()
           : [],
+      status: json['status']?.toString() ?? '',
     );
   }
 }

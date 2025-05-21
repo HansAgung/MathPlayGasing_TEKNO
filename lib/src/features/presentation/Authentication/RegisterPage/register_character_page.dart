@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mathgasing_v1/src/features/presentation/Authentication/RegisterPage/register_provider.dart';
 import 'package:mathgasing_v1/src/features/presentation/Features/homepage.dart';
-import 'package:mathgasing_v1/src/shared/Components/button_primary_custom.dart';
-import 'package:mathgasing_v1/src/shared/Components/button_fourth_custom.dart';
-import 'package:mathgasing_v1/src/shared/Components/term_checkbox.dart';
+import 'package:mathgasing_v1/src/shared/Components/Button/button_primary_custom.dart';
+import 'package:mathgasing_v1/src/shared/Components/Button/button_fourth_custom.dart';
+import 'package:mathgasing_v1/src/shared/Components/Form/term_checkbox.dart';
 import 'package:mathgasing_v1/src/shared/Utils/app_colors.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';

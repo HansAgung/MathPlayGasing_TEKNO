@@ -4,12 +4,12 @@ import 'package:mathgasing_v1/src/features/presentation/Features/main_wrapper_pa
 import 'package:mathgasing_v1/src/shared/Utils/app_colors.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import '../../../core/constants/app_images.dart';
-import '../../../shared/Components/header_homepage.dart';
-import '../../../shared/Components/search_bar_custom.dart';
-import '../../../shared/Components/subcribe_status.dart';
+import '../../../shared/Components/Feature/Test/header_homepage.dart';
+import '../../../shared/Components/Form/search_bar_custom.dart';
+import '../../../shared/Components/Feature/Subscription/subcribe_status.dart';
 import '../../data/models/quest_model.dart';
 import '../../data/repository/quest_repository.dart';
-import '../../../shared/Components/quest_progress_card.dart';
+import '../../../shared/Components/Feature/Test/quest_progress_card.dart';
 import 'QuestFeature/quest_module_page.dart';
 
 class Homepage extends StatefulWidget {

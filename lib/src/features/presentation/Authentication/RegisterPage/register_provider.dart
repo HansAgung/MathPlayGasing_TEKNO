@@ -69,5 +69,6 @@ class RegisterProvider extends ChangeNotifier {
     print("Poin: ${prefs.getInt('points')}");
     print("Energy: ${prefs.getInt('energy')}");
     print("status_subscribe: ${prefs.getString('status_subscribe')}");
+    print("character: ${prefs.getString('character')}");
   }
 }

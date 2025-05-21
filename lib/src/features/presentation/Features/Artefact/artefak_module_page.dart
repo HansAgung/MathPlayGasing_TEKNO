@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mathgasing_v1/src/features/data/models/quest_module_model.dart';
+import 'package:mathgasing_v1/src/features/presentation/Features/QuestFeature/Test/subject_matter_page.dart';
 import '../../../../core/helper/lesson_helper.dart';
-import '../../../../shared/Components/lesson_card.dart';
-import '../../../../shared/Components/lesson_subject_card.dart';
-import '../../../../shared/Components/search_bar_custom.dart';
+import '../../../../shared/Components/Feature/Test/lesson_card.dart';
+import '../../../../shared/Components/Feature/Test/lesson_subject_card.dart';
+import '../../../../shared/Components/Form/search_bar_custom.dart';
 import '../../../../shared/Utils/app_colors.dart';
 
 class ArtefakModulePage extends StatefulWidget {
@@ -80,6 +81,7 @@ class _ArtefakModulePageState extends State<ArtefakModulePage> {
               (module) => ExpandableModuleCard(
                 module: module,
                 cardHeight: cardHeight,
+                isLocked: module.status == "toDo",
               ),
             ),
           ],
@@ -92,11 +94,13 @@ class _ArtefakModulePageState extends State<ArtefakModulePage> {
 class ExpandableModuleCard extends StatefulWidget {
   final QuestModuleModel module;
   final double cardHeight;
+  final bool isLocked;
 
   const ExpandableModuleCard({
     super.key,
     required this.module,
     required this.cardHeight,
+    this.isLocked = false,
   });
 
   @override
@@ -165,7 +169,9 @@ class _ExpandableModuleCardState extends State<ExpandableModuleCard> {
 
           // Footer dengan tombol dropdown
           InkWell(
-            onTap: () {
+            onTap: widget.isLocked
+                ? null
+                : () {
               setState(() {
                 _isExpanded = !_isExpanded;
               });
@@ -173,31 +179,34 @@ class _ExpandableModuleCardState extends State<ExpandableModuleCard> {
             child: Container(
               height: widget.cardHeight * 1 / 3,
               width: double.infinity,
-              decoration: const BoxDecoration(
-                color: Color(0xFF1B9B8F),
-                borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
+              decoration: BoxDecoration(
+                color: widget.isLocked ? Colors.grey : const Color(0xFF1B9B8F),
+                borderRadius: const BorderRadius.vertical(bottom: Radius.circular(16)),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    "Lihat Item",
-                    style: TextStyle(
+                  Text(
+                    widget.isLocked ? "Terkunci" : "Lihat Item",
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 12,
                       fontFamily: 'Poppins-Regular',
                     ),
                   ),
                   Icon(
-                    _isExpanded
-                        ? Icons.keyboard_arrow_up
-                        : Icons.keyboard_arrow_down,
+                    widget.isLocked
+                        ? Icons.lock_outline
+                        : (_isExpanded
+                            ? Icons.keyboard_arrow_up
+                            : Icons.keyboard_arrow_down),
                     color: Colors.white,
                   ),
                 ],
               ),
             ),
+
           ),
 
           // Dropdown Content
@@ -224,6 +233,14 @@ class _ExpandableModuleCardState extends State<ExpandableModuleCard> {
                           return LessonSubjectCard(
                             title: lesson.titleLessonQuest,
                             description: lesson.questLessonDesc,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => SubjectMatterPage(idLessonQuest: lesson.idLessonQuest),
+                                ),
+                              );
+                            },
                           );
                         },
                       ),

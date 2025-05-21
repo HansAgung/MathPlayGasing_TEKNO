@@ -19,6 +19,7 @@ class _ProfilePageState extends State<ProfilePage> {
   int? points;
   int? energy;
   String? statusSubscribe;
+  String? selectedCharacter;
 
   @override
   void initState() {
@@ -36,6 +37,7 @@ class _ProfilePageState extends State<ProfilePage> {
       points = prefs.getInt('points') ?? 0;
       energy = prefs.getInt('energy') ?? 0;
       statusSubscribe = prefs.getString('status_subscribe') ?? '';
+      selectedCharacter = prefs.getString('character') ?? '';
     });
   }
 
@@ -61,7 +63,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(top: 50),
+          padding: const EdgeInsets.only(top: 0),
           child: SizedBox(
             height: screenHeight + 150,
             child: Stack(
@@ -294,9 +296,16 @@ class _ProfilePageState extends State<ProfilePage> {
                           color: AppColors.primaryColor.withOpacity(0.8),
                           border: Border.all(color: Colors.white, width: 4),
                         ),
-                        child: const Center(
-                          child: Icon(Icons.person, size: 80, color: Colors.white),
-                        ),
+                        child: selectedCharacter != null
+                          ? ClipOval(
+                              child: Image.asset(
+                                selectedCharacter!,
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : const Icon(Icons.person, size: 80, color: Colors.white),
                       ),
                       Positioned(
                         bottom: 8,

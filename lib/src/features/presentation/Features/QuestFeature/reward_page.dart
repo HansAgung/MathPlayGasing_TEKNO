@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mathgasing_v1/src/core/constants/app_images.dart';
-import 'package:mathgasing_v1/src/shared/Components/button_third_custom.dart';
+import 'package:mathgasing_v1/src/features/presentation/Features/homepage.dart';
+import 'package:mathgasing_v1/src/features/presentation/Features/main_wrapper_page.dart';
+import 'package:mathgasing_v1/src/shared/Components/Button/button_third_custom.dart';
 
-import '../../../../shared/Components/button_secondary_custom.dart';
+import '../../../../shared/Components/Button/button_secondary_custom.dart';
 import '../../../../shared/Utils/app_colors.dart';
 
 class RewardPage extends StatefulWidget {
@@ -134,7 +136,12 @@ class _RewardPageState extends State<RewardPage> {
                               ButtonSecondaryCustom(
                                 text: "Ambil Hadiah", 
                                 onPressed: () {
-                                  Navigator.pop(context);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => MainWrapperPage()
+                                    ),
+                                  );
                                 },
                               ),
                             ],

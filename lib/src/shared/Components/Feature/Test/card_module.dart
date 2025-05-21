@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../core/constants/app_images.dart';
-import '../../shared/Utils/app_colors.dart';
+import '../../../../core/constants/app_images.dart';
+import '../../../Utils/app_colors.dart';
 
 class CardModule extends StatelessWidget {
   final String title;

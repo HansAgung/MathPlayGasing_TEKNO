@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mathgasing_v1/src/core/constants/app_images.dart';
-import 'package:mathgasing_v1/src/shared/Components/scrolling_subscribe_type.dart';
+import 'package:mathgasing_v1/src/shared/Components/Feature/Subscription/scrolling_subscribe_type.dart';
 import 'package:mathgasing_v1/src/shared/Utils/app_colors.dart';
 
 class SubscribePage extends StatefulWidget {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mathgasing_v1/src/shared/Utils/app_colors.dart';
-import '../../core/constants/app_images.dart';
-import 'button_primary_custom.dart';
-import 'button_secondary_custom.dart';
+import '../../../../core/constants/app_images.dart';
+import '../../Button/button_primary_custom.dart';
+import '../../Button/button_secondary_custom.dart';
 
 class ScrollingSubscribeType extends StatefulWidget {
   const ScrollingSubscribeType({super.key});

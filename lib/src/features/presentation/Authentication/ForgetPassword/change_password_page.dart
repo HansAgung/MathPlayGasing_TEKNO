@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mathgasing_v1/src/features/presentation/Authentication/login_page.dart';
-import 'package:mathgasing_v1/src/shared/Components/button_primary_custom.dart';
-import 'package:mathgasing_v1/src/shared/Components/custom_password_field.dart';
-import 'package:mathgasing_v1/src/shared/Components/term_checkbox.dart';
+import 'package:mathgasing_v1/src/shared/Components/Button/button_primary_custom.dart';
+import 'package:mathgasing_v1/src/shared/Components/Form/custom_password_field.dart';
+import 'package:mathgasing_v1/src/shared/Components/Form/term_checkbox.dart';
 import 'package:mathgasing_v1/src/shared/Utils/app_colors.dart';
 import '../../../data/repository/user_database_repository.dart';
 

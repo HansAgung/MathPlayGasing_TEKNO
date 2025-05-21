@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../features/data/models/materi_model.dart';
+import '../../../../features/data/models/materi_model.dart';
 
 class MateriCard extends StatelessWidget {
   final MateriModel materi;
